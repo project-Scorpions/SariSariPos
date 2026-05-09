@@ -33,7 +33,8 @@ const toNumber = (value: number | string): number => {
   return Number.isFinite(parsed) ? parsed : 0;
 };
 
-const txId = () => `TX-${Date.now()}`;
+const txId = () =>
+  `TX-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
 
 type AppState = {
   user: User | null;

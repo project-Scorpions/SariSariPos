@@ -12,6 +12,17 @@ import {
 import type { Product, Sale, Variant } from '../types';
 
 const peso = (value: number) => `₱${value.toFixed(2)}`;
+const parseVariantInputValue = (field: keyof Variant, value: string) => {
+  if (field === 'name') {
+    return value;
+  }
+
+  if (field === 'stock') {
+    return value === '' ? null : Number(value);
+  }
+
+  return Number(value);
+};
 
 type BasicModalProps = {
   visible: boolean;
@@ -130,7 +141,7 @@ export const ProductFormModal: React.FC<
         v.id === id
           ? {
               ...v,
-              [field]: field === 'stock' ? (value === '' ? null : Number(value)) : field === 'name' ? value : Number(value),
+              [field]: parseVariantInputValue(field, value),
             }
           : v,
       ),
