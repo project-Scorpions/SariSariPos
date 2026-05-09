@@ -33,14 +33,6 @@ const toNumber = (value: number | string): number => {
   return Number.isFinite(parsed) ? parsed : 0;
 };
 
-const txId = () => {
-  const uniquePart =
-    typeof globalThis.crypto?.randomUUID === 'function'
-      ? globalThis.crypto.randomUUID()
-      : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-  return `TX-${uniquePart.toUpperCase()}`;
-};
-
 type AppState = {
   user: User | null;
   loading: boolean;
@@ -218,9 +210,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const balance = Math.max(0, total - safeCash);
     const change = Math.max(0, safeCash - total);
     const isUtang = balance > 0;
+    const transactionId = `TX-${doc(collection(db, `users/${user.uid}/sales`)).id.toUpperCase()}`;
 
     const salePayload = {
-      transactionId: txId(),
+      transactionId,
       items: cart,
       total,
       cashReceived: safeCash,
