@@ -12,16 +12,24 @@ import {
 import type { Product, Sale, Variant } from '../types';
 
 const peso = (value: number) => `₱${value.toFixed(2)}`;
-const parseVariantInputValue = (field: keyof Variant, value: string) => {
+const parseVariantInputValue = (
+  field: keyof Variant,
+  value: string,
+): Variant[keyof Variant] => {
+  const toSafeNumber = (raw: string) => {
+    const parsed = Number(raw);
+    return Number.isFinite(parsed) ? parsed : 0;
+  };
+
   if (field === 'name') {
     return value;
   }
 
   if (field === 'stock') {
-    return value === '' ? null : Number(value);
+    return value === '' ? null : toSafeNumber(value);
   }
 
-  return Number(value);
+  return toSafeNumber(value);
 };
 
 type BasicModalProps = {

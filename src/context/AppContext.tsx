@@ -33,8 +33,13 @@ const toNumber = (value: number | string): number => {
   return Number.isFinite(parsed) ? parsed : 0;
 };
 
-const txId = () =>
-  `TX-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+const txId = () => {
+  const uniquePart =
+    typeof globalThis.crypto?.randomUUID === 'function'
+      ? globalThis.crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  return `TX-${uniquePart.toUpperCase()}`;
+};
 
 type AppState = {
   user: User | null;
